@@ -5,127 +5,116 @@
 // create a counter for number of choices left
 // create a counter for how many times the choices showed up
 // when new images are showed somehow show 3 different images maybe use pop
-var choicesLeft = 25;
+Bus.choicesLeft = 0;
 Bus.myPics = [];
 Bus.selectedNumbers =[];
 Bus.savedNumbers = [];
+Bus.allTheVotes = [];
 Bus.imgElements = document.getElementsByClassName('picture-choices');
+Bus.ulEL= document.getElementById('final-stats');
+Bus.sectionEl = document.getElementById('crazy-pic-section');
 
 
-function Bus(filepath, displayName, photoId){
-  this.filepath = filepath;
+function Bus(displayName,filepath){
   this.displayName = displayName;
-  this.photoId = photoId;
+  this.filepath = filepath;
   this.timesShown = 0;
   this.timesChosen = 0;
-  
-  
-  
-  
   Bus.myPics.push(this);
-  
-
 }
 
 
-new Bus ('img/bag.jpg', 'r2d2 Bag','bag');
-new Bus ('img/banana.jpg', 'Banana Slicer', 'banana');
-new Bus ('img/bathroom.jpg','Ipad Toilet', 'bathroom');
-// new Bus ('img/boots.jpg');
-// new Bus ('img/breakfast.jpg');
-// new Bus ('img/bubblegum.jpg');
-// new Bus ('img/chair.jpg');
-// new Bus ('img/cthulhu.jpg');
-// new Bus ('img/dog-duck.jpg');
-// new Bus ('img/dragon.jpg');
-// new Bus ('img/pen.jpg');
-// new Bus ('img/pet-sweep.jpg');
-// new Bus ('img/scissors.jpg');
-// new Bus ('img/shark.jpg');
-// new Bus ('img/sweep.png');
-// new Bus ('img/tauntaun.jpg');
-// new Bus ('img/unicorn.jpg');
-// new Bus ('img/usb.gif');
-// new Bus ('img/water-can.jpg');
-// new Bus ('img/wine-glass.jpg');
+new Bus ('r2d2 Bag','img/bag.jpg');
+new Bus ('Banana Slicer','img/banana.jpg');
+new Bus ('Ipad Toilet','img/bathroom.jpg');
+new Bus ('Rubber Boots','img/boots.jpg');
+new Bus ('Breakfast Maker','img/breakfast.jpg');
+new Bus ('Meat Gum','img/bubblegum.jpg');
+new Bus ('Odd Chair','img/chair.jpg');
+new Bus ('Cthulu','img/cthulhu.jpg');
+new Bus ('Dog-Duck','img/dog-duck.jpg');
+new Bus ('Dragon Meat','img/dragon.jpg');
+new Bus ('Utensil Pen','img/pen.jpg');
+new Bus ('Pet Sweep','img/pet-sweep.jpg');
+new Bus ('Pizza scissors','img/scissors.jpg');
+new Bus ('Man Eating Shark','img/shark.jpg');
+new Bus ('Baby Sweeper','img/sweep.png');
+new Bus ('Napping Baby','img/tauntaun.jpg');
+new Bus ('Unicorn Meat','img/unicorn.jpg');
+new Bus ('Tentacle Horror','img/usb.gif');
+new Bus ('Pointless Water Can','img/water-can.jpg');
+new Bus ('Weird Wine Glass','img/wine-glass.jpg');
 
-// function repeatAnswer(){
-//   if(Bus.myPics === Bus.selectedNumbers){
-//     Bus.randomBus();
-//     Bus.randomBusAgain();
-//     Bus.randomBusOneMoreTime();
+Bus.firstPicEl = document.getElementById('first-picture');
+Bus.secondPicEl = document.getElementById('second-picture');
+Bus.thirdPicEl = document.getElementById('third-picture');
 
-//   }
-//   else{
-// Bus.selectedNumbers.pop();
-// Bus.selectedNumbers.pop();
-// Bus.selectedNumbers.pop();
-//   }
-// }
+Bus.crazyPicture = function(){
+  do{
+    var numberOnePicture = Math.floor(Math.random() * Bus.myPics.length);
+    var numberTwoPicture = Math.floor(Math.random() * Bus.myPics.length);
+    var numberThreePicture = Math.floor(Math.random() * Bus.myPics.length);
+  } while(numberOnePicture === numberTwoPicture
+    || numberOnePicture === numberThreePicture
+    || numberTwoPicture === numberThreePicture
+    || Bus.selectedNumbers.includes(numberOnePicture)
+    || Bus.selectedNumbers.includes(numberTwoPicture)
+    || Bus.selectedNumbers.includes(numberThreePicture));
+  Bus.selectedNumbers.pop();
+  Bus.selectedNumbers.pop();
+  Bus.selectedNumbers.pop();
 
-Bus.pictureChooser = function(index){
-  
-  var randomNum = Math.random() * Bus.myPics.length;
-  var roundedDown = Math.floor(randomNum);
-  var myImage = Bus.myPics[roundedDown];
-  Bus.selectedNumbers.push(myImage);
-  Bus.savedNumbers.push(myImage);
-  Bus.imgElements[index].src = myImage.filepath;
-  Bus.imgElements[index].id=myImage.photoId;
-  console.log('randombus is here.')
-  // repeatAnswer();
+  Bus.selectedNumbers.push(numberOnePicture);
+  Bus.selectedNumbers.push(numberTwoPicture);
+  Bus.selectedNumbers.push(numberThreePicture);
+
+  Bus.firstPicEl.src = Bus.myPics[numberOnePicture].filepath;
+  Bus.firstPicEl.alt = Bus.myPics[numberOnePicture].displayName;
+
+  Bus.secondPicEl.src = Bus.myPics[numberTwoPicture].filepath;
+  Bus.secondPicEl.alt = Bus.myPics[numberTwoPicture].displayName;
+
+  Bus.thirdPicEl.src = Bus.myPics[numberThreePicture].filepath;
+  Bus.thirdPicEl.alt = Bus.myPics[numberThreePicture].displayName;
+
+  Bus.myPics[numberOnePicture].timesShown++;
+  Bus.myPics[numberTwoPicture].timesShown++;
+  Bus.myPics[numberTwoPicture].timesShown++;
 };
 
-Bus.randomBusAgain = function(){
-  var randomNum = Math.random() * Bus.myPics.length;
-  var roundedDown = Math.floor(randomNum);
-  var myImage = Bus.myPics[roundedDown];
-  Bus.selectedNumbers.push(myImage);
-  Bus.savedNumbers.push(myImage);
-  Bus.imgElement2.src = myImage.filepath;
-  // repeatAnswer();
-};
-Bus.randomBusOneMoreTime = function(){
-  var randomNum = Math.random() * Bus.myPics.length;
-  var roundedDown = Math.floor(randomNum);
-  var myImage = Bus.myPics[roundedDown];
-  Bus.selectedNumbers.push(myImage);
-  Bus.savedNumbers.push(myImage);
-  Bus.imgElement3.src = myImage.filepath;
-  // repeatAnswer();
+Bus.listShower = function(){
+  for (var i=0; i < Bus.myPics.length; i++){
+    var listEL = document.createElement('li');
+    listEL.textContent = `${Bus.myPics[i].displayName} has recieved ${Bus.myPics[i].timesChosen} selections. ${Bus.myPics[i].displayName} was shown ${Bus.myPics[i].timesShown} times.`;
+    Bus.ulEL.appendChild(listEL);
+  }
 };
 
+Bus.voteUpdater = function(){
+  for (var i=0; i < Bus.myPics; i++){
+    Bus.allTheVotes[i] = Bus.myPics[i].timesChosen;
+    Bus.displayName[i] = Bus.myPics[i];
+  }
+};
+Bus.clickingHandler = function(event){
+  Bus.choicesLeft++;
+  for (var i=0; i < Bus.myPics.length; i++){
+    if(event.target.alt === Bus.myPics[i].displayName){
+      Bus.myPics[i].timesChosen++;
 
-// Bus.addNewPics = function(event){
-// event.preventDefault();
+    }
+  }
+  if(Bus.choicesLeft > 24){
+    Bus.sectionEl.removeEventListener('click',Bus.clickingHandler);
+    Bus.listShower();
+    Bus.voteUpdater();
 
-// Bus.randomBus(0);
-// // Bus.randomBusAgain();
-// // Bus.randomBusOneMoreTime();
-// }
+  }else{
+    Bus.crazyPicture();
+  }
+};
+Bus.sectionEl.addEventListener('click',Bus.clickingHandler);
 
-Bus.pictureChooser(0);
-Bus.pictureChooser(1);
-Bus.pictureChooser(2);
-console.log(Bus.imgElements);
-Bus.imgElements[0].addEventListener('click', function(){ 
-  Bus.pictureChooser(0);
-  Bus.pictureChooser(1);
-  Bus.pictureChooser(2);
-  var pictureSet= document.getElementsByClassName('picture-choices');
-  console.log(pictureSet);
-});
-Bus.imgElements[1].addEventListener('click', function(){ 
-  Bus.pictureChooser(0);
-  Bus.pictureChooser(1);
-  Bus.pictureChooser(2);
-});
-Bus.imgElements[2].addEventListener('click', function(){ 
-  Bus.pictureChooser(0);
-  Bus.pictureChooser(1);
-  Bus.pictureChooser(2);
-});
-// Bus.imgElements[0].addEventListener('click', console.log('I hear you.'));
+Bus.crazyPicture();
 
-// Bus.randomBusAgain();
-// Bus.randomBusOneMoreTime();
+
