@@ -81,7 +81,7 @@ Bus.crazyPicture = function(){
   Bus.myPics[numberTwoPicture].timesShown++;
   Bus.myPics[numberTwoPicture].timesShown++;
 };
-
+// shows list after votes are done
 Bus.listShower = function(){
   for (var i=0; i < Bus.myPics.length; i++){
     var listEL = document.createElement('li');
@@ -89,7 +89,7 @@ Bus.listShower = function(){
     Bus.ulEL.appendChild(listEL);
   }
 };
-
+// function to update the votes
 Bus.voteUpdater = function(){
   for (var i=0; i < Bus.myPics; i++){
     Bus.allTheVotes[i] = Bus.myPics[i].timesChosen;
