@@ -1,3 +1,14 @@
 img{
   max-width: 300px;
 }
+ul{
+  text-align: center;
+}
+.hide{
+  display:none;
+}
+
+.chart-wrapper{
+  width:600px;
+  height:300px;
+}
