@@ -10,6 +10,7 @@ Bus.myPics = [];
 Bus.selectedNumbers =[];
 Bus.savedNumbers = [];
 Bus.allTheVotes = [];
+Bus.savedNames= [];
 Bus.imgElements = document.getElementsByClassName('picture-choices');
 Bus.ulEL= document.getElementById('final-stats');
 Bus.sectionEl = document.getElementById('crazy-pic-section');
@@ -91,9 +92,9 @@ Bus.listShower = function(){
 };
 // function to update the votes
 Bus.voteUpdater = function(){
-  for (var i=0; i < Bus.myPics; i++){
+  for (var i in Bus.myPics) {
     Bus.allTheVotes[i] = Bus.myPics[i].timesChosen;
-    Bus.displayName[i] = Bus.myPics[i];
+    Bus.savedNames[i] = Bus.myPics[i].displayName;
   }
 };
 Bus.hideElements = function(){
@@ -105,16 +106,16 @@ Bus.hideElements = function(){
 Bus.showChart = function() {
   var context = document.getElementById('data-chart').getContext('2d');
 
-  var chartColors = ['yellow', 'orange', 'purple', 'blue','green','yellow', 'orange', 'purple', 'blue','green','yellow', 'orange', 'purple', 'blue','green','yellow', 'orange', 'purple', 'blue','green'];
+  // var chartColors = ['yellow', 'orange', 'purple', 'blue','green','yellow', 'orange', 'purple', 'blue','green','yellow', 'orange', 'purple', 'blue','green','yellow', 'orange', 'purple', 'blue','green'];
 
   var busProductChart = new Chart(context, { // eslint-disable-line
     type: 'bar',
     data : {
-      labels: Bus.displayNames,
+      labels: Bus.savedNames,
       datasets: [{
-        labels: 'How many times a product was chosen.',
-        data: Bus.timesChosen,
-        backgroundColors: chartColors
+        label: 'How many times a product was chosen.',
+        data: Bus.allTheVotes,
+        backgroundColor: ['yellow', 'orange', 'purple', 'blue','green','yellow', 'orange', 'purple', 'blue','green','yellow', 'orange', 'purple', 'blue','green','yellow', 'orange', 'purple', 'blue','green'],
       }],
     },
     options: {
@@ -182,6 +183,10 @@ Bus.clickingHandler = function(event){
   }
   if(Bus.choicesLeft > 24){
     Bus.sectionEl.removeEventListener('click',Bus.clickingHandler);
+
+    // store results in local storage
+    localStorage.setItem('userResults',JSON.stringify(Bus.myPics));
+    // other functions
     Bus.listShower();
     Bus.voteUpdater();
     Bus.hideElements();
