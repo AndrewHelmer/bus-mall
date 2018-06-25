@@ -1,4 +1,3 @@
-'use strict';
 // build a object constructor
 // add an event for the constructor
 // create a scoring system for the images
@@ -10,6 +9,7 @@ Bus.myPics = [];
 Bus.selectedNumbers =[];
 Bus.savedNumbers = [];
 Bus.allTheVotes = [];
+Bus.savedNames= [];
 Bus.imgElements = document.getElementsByClassName('picture-choices');
 Bus.ulEL= document.getElementById('final-stats');
 Bus.sectionEl = document.getElementById('crazy-pic-section');
@@ -81,7 +81,7 @@ Bus.crazyPicture = function(){
   Bus.myPics[numberTwoPicture].timesShown++;
   Bus.myPics[numberTwoPicture].timesShown++;
 };
-
+// shows list after votes are done
 Bus.listShower = function(){
   for (var i=0; i < Bus.myPics.length; i++){
     var listEL = document.createElement('li');
@@ -89,13 +89,62 @@ Bus.listShower = function(){
     Bus.ulEL.appendChild(listEL);
   }
 };
-
+// function to update the votes
 Bus.voteUpdater = function(){
-  for (var i=0; i < Bus.myPics; i++){
+  for (var i in Bus.myPics) {
     Bus.allTheVotes[i] = Bus.myPics[i].timesChosen;
-    Bus.displayName[i] = Bus.myPics[i];
+    Bus.savedNames[i] = Bus.myPics[i].displayName;
   }
 };
+Bus.hideElements = function(){
+  Bus.firstPicEl.classList.add('hide');
+  Bus.secondPicEl.classList.add('hide');
+  Bus.thirdPicEl.classList.add('hide');
+};
+Bus.checkLocaleStorage = function(){
+  if(localStorage.getItem('allBusObjects')) {
+    Bus.loadLocalStorage();
+  } else{
+    Bus.savedLocalStorage();
+  }
+
+};
+Bus.savedLocalStorage = function(){
+  var savedStringedObjects = JSON.stringify(Bus.myPics);
+  localStorage.setItem('allBusObjects', savedStringedObjects);
+};
+Bus.loadLocalStorage = function(){
+  var storedStringedObjects = localStorage.getItem('allBusObjects');
+  Bus.myPics = JSON.parse(storedStringedObjects);
+};
+Bus.showChart = function() {
+  Bus.savedLocalStorage();
+  var context = document.getElementById('data-chart').getContext('2d');
+  var busProductChart = new Chart(context, { // eslint-disable-line
+    type: 'bar',
+    data : {
+      labels: Bus.savedNames,
+      datasets: [{
+        label: 'How many times a product was chosen.',
+        data: Bus.allTheVotes,
+        backgroundColor: ['yellow', 'orange', 'purple', 'blue','green','yellow', 'orange', 'purple', 'blue','green','yellow', 'orange', 'purple', 'blue','green','yellow', 'orange', 'purple', 'blue','green'],
+      }],
+    },
+    options: {
+      responsive:true,
+      maintainAspectRatio: false,
+      scales: {
+        yAxes: [{
+          tick: {
+            beginAtZero: true
+          }
+        }]
+      }
+    }
+  });
+};
+
+
 Bus.clickingHandler = function(event){
   Bus.choicesLeft++;
   for (var i=0; i < Bus.myPics.length; i++){
@@ -106,8 +155,14 @@ Bus.clickingHandler = function(event){
   }
   if(Bus.choicesLeft > 24){
     Bus.sectionEl.removeEventListener('click',Bus.clickingHandler);
+
+    // store results in local storage
+    localStorage.setItem('userResults',JSON.stringify(Bus.myPics));
+    // other functions
     Bus.listShower();
     Bus.voteUpdater();
+    Bus.hideElements();
+    Bus.showChart();
 
   }else{
     Bus.crazyPicture();
@@ -116,5 +171,5 @@ Bus.clickingHandler = function(event){
 Bus.sectionEl.addEventListener('click',Bus.clickingHandler);
 
 Bus.crazyPicture();
-
+Bus.checkLocalStorage();
 
