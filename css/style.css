@@ -1,6 +1,24 @@
+body{
+  background-color: lightblue;
+}
+.header-pic{
+  width: 200px;
+  position: relative;
+  text-align: center;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
 img{
   max-width: 300px;
 }
+h1{
+  text-align: center;
+  font-size: 50px;
+  background-color: blue;
+  color:red;
+}
+
 ul{
   text-align: center;
 }

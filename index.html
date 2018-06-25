@@ -7,16 +7,25 @@
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-  <h1>Click your choice please.</h1>
-  <ul id = "final-stats"></ul>
-  <section id="crazy-pic-section">
-    <img class="" id="first-picture" src= "" alt="">
-    <img class="" id="second-picture" src= "" alt="">
-    <img class="" id="third-picture" src="" alt="">
-  </section>
+  <header>
+    <nav>
+    <h1> Bus Mall!</h1>
+      <img class=header-pic src = "img/pexels-photo-1091470.jpeg">
+    <h2>Click the item that interests you the most.</h2>
+    <ul id = "final-stats"></ul>
+    </nav>
+    <section id="crazy-pic-section">
+      <img class="" id="first-picture" src= "" alt="">
+      <img class="" id="second-picture" src= "" alt="">
+      <img class="" id="third-picture" src="" alt="">
+    </section>
+  </header>
+  <main>
+    <h1>Chart results!</h1>
     <div class="chart-wrapper">
       <canvas id="data-chart" width="600" height="300"></canvas>
     </div>
+  </main>
   <script src = "https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min.js"></script>
   <script src="js/app.js"></script>
 </body>

@@ -102,12 +102,25 @@ Bus.hideElements = function(){
   Bus.secondPicEl.classList.add('hide');
   Bus.thirdPicEl.classList.add('hide');
 };
+Bus.checkLocaleStorage = function(){
+  if(localStorage.getItem('allBusObjects')) {
+    Bus.loadLocalStorage();
+  } else{
+    Bus.savedLocalStorage();
+  }
 
+};
+Bus.savedLocalStorage = function(){
+  var savedStringedObjects = JSON.stringify(Bus.myPics);
+  localStorage.setItem('allBusObjects', savedStringedObjects);
+};
+Bus.loadLocalStorage = function(){
+  var storedStringedObjects = localStorage.getItem('allBusObjects');
+  Bus.myPics = JSON.parse(storedStringedObjects);
+};
 Bus.showChart = function() {
+  Bus.savedLocalStorage();
   var context = document.getElementById('data-chart').getContext('2d');
-
-  // var chartColors = ['yellow', 'orange', 'purple', 'blue','green','yellow', 'orange', 'purple', 'blue','green','yellow', 'orange', 'purple', 'blue','green','yellow', 'orange', 'purple', 'blue','green'];
-
   var busProductChart = new Chart(context, { // eslint-disable-line
     type: 'bar',
     data : {
@@ -159,5 +172,6 @@ Bus.clickingHandler = function(event){
 Bus.sectionEl.addEventListener('click',Bus.clickingHandler);
 
 Bus.crazyPicture();
+Bus.checkLocalStorage();
 
 
